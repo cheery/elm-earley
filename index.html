@@ -6415,32 +6415,24 @@ var $author$project$Main$scan2_seed = F4(
 			select,
 			$elm$core$Dict$toList(state));
 	});
-var $elm$core$Dict$map = F2(
-	function (func, dict) {
-		if (dict.$ === 'RBEmpty_elm_builtin') {
-			return $elm$core$Dict$RBEmpty_elm_builtin;
-		} else {
-			var color = dict.a;
-			var key = dict.b;
-			var value = dict.c;
-			var left = dict.d;
-			var right = dict.e;
-			return A5(
-				$elm$core$Dict$RBNode_elm_builtin,
-				color,
-				key,
-				A2(func, key, value),
-				A2($elm$core$Dict$map, func, left),
-				A2($elm$core$Dict$map, func, right));
-		}
-	});
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
 var $author$project$Main$scoreup = function (ss) {
-	return A2(
-		$elm$core$Dict$map,
-		function (k) {
-			return $elm$core$Basics$add(1);
-		},
-		ss);
+	return $elm$core$Dict$fromList(
+		A2(
+			$elm$core$List$map,
+			A2($author$project$Main$eime_increment, 1, 1),
+			$elm$core$Dict$toList(ss)));
 };
 var $author$project$Main$step_eime = F4(
 	function (pars, state, last, input) {

@@ -136,7 +136,7 @@ step_eime pars state last input = case input of
         in step_eime pars (last :: state) ss3 rest
             
 scoreup : Dict EIM Int -> Dict EIM Int
-scoreup ss = Dict.map (\k -> (+) 1) ss
+scoreup ss = Dict.fromList (List.map (eime_increment 1 1) (Dict.toList ss))
 
 -- Scan alone does "reduction" -only.
 scan2 : Parsing -> String -> Dict EIM Int -> Int -> Int -> List EIME
