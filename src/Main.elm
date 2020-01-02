@@ -311,16 +311,7 @@ view_eims : Parsing -> Set EIME -> Html Msg
 view_eims pars eime = div [style "margin" "1em 1em"]
     (List.map
         (view_eime pars)
-        (uniqeims (List.sortBy eime_sortcond (Set.toList eime))))
-
-uniqeims : List EIME -> List EIME
-uniqeims eimes = case eimes of
-    x :: rest -> case rest of
-        y :: restt -> if x == y
-            then uniqeims (y :: restt)
-            else x :: uniqeims (y :: restt)
-        [] -> x :: []
-    [] -> []
+        (List.sortBy eime_sortcond (Set.toList eime)))
 
 eime_sortcond : EIME -> ((Int, Int, Int), Int)
 eime_sortcond ((o,i,p), e) = ((-o,e,i),p)

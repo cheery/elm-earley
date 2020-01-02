@@ -6849,34 +6849,6 @@ var $author$project$Main$eime_sortcond = function (_v0) {
 		p);
 };
 var $elm$core$List$sortBy = _List_sortBy;
-var $author$project$Main$uniqeims = function (eimes) {
-	uniqeims:
-	while (true) {
-		if (eimes.b) {
-			var x = eimes.a;
-			var rest = eimes.b;
-			if (rest.b) {
-				var y = rest.a;
-				var restt = rest.b;
-				if (_Utils_eq(x, y)) {
-					var $temp$eimes = A2($elm$core$List$cons, y, restt);
-					eimes = $temp$eimes;
-					continue uniqeims;
-				} else {
-					return A2(
-						$elm$core$List$cons,
-						x,
-						$author$project$Main$uniqeims(
-							A2($elm$core$List$cons, y, restt)));
-				}
-			} else {
-				return A2($elm$core$List$cons, x, _List_Nil);
-			}
-		} else {
-			return _List_Nil;
-		}
-	}
-};
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $author$project$Main$view_eime = F2(
 	function (pars, _v0) {
@@ -6980,11 +6952,10 @@ var $author$project$Main$view_eims = F2(
 			A2(
 				$elm$core$List$map,
 				$author$project$Main$view_eime(pars),
-				$author$project$Main$uniqeims(
-					A2(
-						$elm$core$List$sortBy,
-						$author$project$Main$eime_sortcond,
-						$elm$core$Set$toList(eime)))));
+				A2(
+					$elm$core$List$sortBy,
+					$author$project$Main$eime_sortcond,
+					$elm$core$Set$toList(eime))));
 	});
 var $author$project$Main$view_rule = function (_v0) {
 	var lhs = _v0.a;
