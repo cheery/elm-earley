@@ -11,6 +11,7 @@ import Set exposing (..)
 import Dict exposing (..)
 import Maybe exposing (..)
 import String exposing (fromInt)
+import Debug exposing (..)
 
 type alias Rule = (String, List String)
 type alias Grammar = Array Rule
@@ -136,7 +137,9 @@ step_eime pars state last input = case input of
         in step_eime pars (last :: state) ss3 rest
             
 scoreup : Dict EIM Int -> Dict EIM Int
-scoreup ss = Dict.fromList (List.map (eime_increment 1 1) (Dict.toList ss))
+scoreup ss =
+    let scoreup_eime ((o,i,p),e) = ((o+1,i,p),e+1)
+    in Dict.fromList (List.map scoreup_eime (Dict.toList ss))
 
 -- Scan alone does "reduction" -only.
 scan2 : Parsing -> String -> Dict EIM Int -> Int -> Int -> List EIME
@@ -308,7 +311,16 @@ view_eims : Parsing -> Set EIME -> Html Msg
 view_eims pars eime = div [style "margin" "1em 1em"]
     (List.map
         (view_eime pars)
-        (List.sortBy eime_sortcond (Set.toList eime)))
+        (uniqeims (List.sortBy eime_sortcond (Set.toList eime))))
+
+uniqeims : List EIME -> List EIME
+uniqeims eimes = case eimes of
+    x :: rest -> case rest of
+        y :: restt -> if x == y
+            then uniqeims (y :: restt)
+            else x :: uniqeims (y :: restt)
+        [] -> x :: []
+    [] -> []
 
 eime_sortcond : EIME -> ((Int, Int, Int), Int)
 eime_sortcond ((o,i,p), e) = ((-o,e,i),p)
@@ -332,8 +344,6 @@ view_eime pars (eim,err) =
             span [ style "color" "green"
                  , style "font-size" "75%" ] [text (" / " ++ fromInt err)]])
         )
-
-
 
 -- Represents set of relations betveen values.
 type alias DictSet k v = Dict k (Set v)
